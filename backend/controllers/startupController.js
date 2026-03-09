@@ -193,10 +193,10 @@ exports.getStartupDetails = async (req, res) => {
     const { startupId } = req.params;
 
     const startup = await Startup.findById(startupId)
-      .populate("founder", "name email")
-      .populate("professionalsJoined", "name email skills")
-      .populate("mentorsJoined", "name email verified")
-      .populate("investorsInterested", "name email");
+      .populate("founder", "name email role portfolio verified")
+      .populate("professionalsJoined", "name email role skills portfolio verified")
+      .populate("mentorsJoined", "name email role skills portfolio verified")
+      .populate("investorsInterested", "name email role portfolio verified");
 
     if (!startup) {
       return res.status(404).json({

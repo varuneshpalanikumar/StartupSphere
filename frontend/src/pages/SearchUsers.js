@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import API from "../services/api";
 import UserCard from "../components/UserCard";
+import UserInfoModal from "../components/UserInfoModal";
 
 function SearchUsers() {
   const location = useLocation();
@@ -15,6 +16,7 @@ function SearchUsers() {
   const [users, setUsers] = useState([]);
   const [founderStartups, setFounderStartups] = useState([]);
   const [selectedStartupId, setSelectedStartupId] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
@@ -178,7 +180,6 @@ function SearchUsers() {
           <div className="grid grid-3">
             <div className="input-group">
               <label>Role</label>
-
               <select
                 name="role"
                 value={filters.role}
@@ -193,7 +194,6 @@ function SearchUsers() {
 
             <div className="input-group">
               <label>Skill</label>
-
               <input
                 name="skill"
                 value={filters.skill}
@@ -204,7 +204,6 @@ function SearchUsers() {
 
             <div className="input-group">
               <label>Name</label>
-
               <input
                 name="name"
                 value={filters.name}
@@ -222,11 +221,16 @@ function SearchUsers() {
           </button>
         </div>
 
+        <p className="muted" style={{ marginBottom: "14px" }}>
+          Click any user card to view full details.
+        </p>
+
         <div className="grid grid-3">
           {users.map((user) => (
             <UserCard
               key={user._id}
               user={user}
+              onClick={setSelectedUser}
               showMentorActions={loggedInUser?.role === "founder" && filters.role === "mentor"}
               showInvestorActions={loggedInUser?.role === "founder" && filters.role === "investor"}
               founderStartups={founderStartups}
@@ -239,6 +243,11 @@ function SearchUsers() {
           ))}
         </div>
       </div>
+
+      <UserInfoModal
+        user={selectedUser}
+        onClose={() => setSelectedUser(null)}
+      />
     </>
   );
 }

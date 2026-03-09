@@ -1,5 +1,6 @@
 function UserCard({
   user,
+  onClick,
   showMentorActions = false,
   showInvestorActions = false,
   founderStartups = [],
@@ -10,7 +11,11 @@ function UserCard({
   onSendFundingRequest
 }) {
   return (
-    <div className="card">
+    <div
+      className="card"
+      style={{ cursor: "pointer" }}
+      onClick={() => onClick && onClick(user)}
+    >
       <h3>
         {user.name}
 
@@ -34,17 +39,28 @@ function UserCard({
       {user.portfolio && (
         <p>
           <strong>Portfolio:</strong>{" "}
-          <a href={user.portfolio} target="_blank" rel="noreferrer">
+          <a
+            href={user.portfolio}
+            target="_blank"
+            rel="noreferrer"
+            onClick={(e) => e.stopPropagation()}
+          >
             View
           </a>
         </p>
       )}
 
       {(showMentorActions || showInvestorActions) && (
-        <div style={{ marginTop: "16px" }}>
+        <div
+          style={{ marginTop: "16px" }}
+          onClick={(e) => e.stopPropagation()}
+        >
           <div className="input-group">
             <label>Select Startup</label>
-            <select value={selectedStartupId} onChange={(e) => onStartupChange(e.target.value)}>
+            <select
+              value={selectedStartupId}
+              onChange={(e) => onStartupChange(e.target.value)}
+            >
               <option value="">Choose startup</option>
               {founderStartups.map((startup) => (
                 <option key={startup._id} value={startup._id}>
@@ -57,7 +73,10 @@ function UserCard({
       )}
 
       {showMentorActions && user.role === "mentor" && (
-        <div style={{ marginTop: "10px" }}>
+        <div
+          style={{ marginTop: "10px" }}
+          onClick={(e) => e.stopPropagation()}
+        >
           <button
             className="btn btn-primary"
             style={{ marginRight: "10px" }}
@@ -76,7 +95,10 @@ function UserCard({
       )}
 
       {showInvestorActions && user.role === "investor" && (
-        <div style={{ marginTop: "10px" }}>
+        <div
+          style={{ marginTop: "10px" }}
+          onClick={(e) => e.stopPropagation()}
+        >
           <button
             className="btn btn-primary"
             onClick={() => onSendFundingRequest(user._id)}

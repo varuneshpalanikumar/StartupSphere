@@ -4,6 +4,7 @@ import API from "../services/api";
 import ReviewCard from "../components/ReviewCard";
 import StatCard from "../components/StatCard";
 import Navbar from "../components/Navbar";
+import UserInfoModal from "../components/UserInfoModal";
 
 function StartupPortfolio() {
   const { id } = useParams();
@@ -20,6 +21,8 @@ function StartupPortfolio() {
     progress: "",
     latestUpdate: ""
   });
+
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -139,13 +142,13 @@ function StartupPortfolio() {
   }
 
   const { startup, reviews, investorCount, teamSize } = data;
-  
-  
+
   const investorAlreadyLinked =
-  user?.role === "investor" &&
-  startup.investorsInterested?.some(
-    (investor) => investor._id === user._id
-  );
+    user?.role === "investor" &&
+    startup.investorsInterested?.some(
+      (investor) => investor._id === user._id
+    );
+
   return (
     <>
       <Navbar />
@@ -171,12 +174,21 @@ function StartupPortfolio() {
           <StatCard title="Funding Required" value={`$${startup.fundingRequired}`} />
         </div>
 
+        <p className="muted" style={{ marginBottom: "16px" }}>
+          Click any joined profile card below to view contact details.
+        </p>
+
         <h2 className="section-title">Mentors Joined</h2>
 
         <div className="grid grid-2" style={{ marginBottom: "24px" }}>
           {startup.mentorsJoined && startup.mentorsJoined.length > 0 ? (
             startup.mentorsJoined.map((mentor) => (
-              <div className="card" key={mentor._id}>
+              <div
+                className="card"
+                key={mentor._id}
+                style={{ cursor: "pointer" }}
+                onClick={() => setSelectedUser(mentor)}
+              >
                 <h4>
                   {mentor.name}
                   {mentor.verified && (
@@ -191,6 +203,59 @@ function StartupPortfolio() {
             <p className="muted">No mentors joined yet.</p>
           )}
         </div>
+
+        <h2 className="section-title">Professionals Joined</h2>
+
+        <div className="grid grid-2" style={{ marginBottom: "24px" }}>
+          {startup.professionalsJoined && startup.professionalsJoined.length > 0 ? (
+            startup.professionalsJoined.map((professional) => (
+              <div
+                className="card"
+                key={professional._id}
+                style={{ cursor: "pointer" }}
+                onClick={() => setSelectedUser(professional)}
+              >
+                <h4>
+                  {professional.name}
+                  {professional.verified && (
+                    <span className="verified-badge">✔ Verified</span>
+                  )}
+                </h4>
+
+                <p className="muted">{professional.email}</p>
+              </div>
+            ))
+          ) : (
+            <p className="muted">No professionals joined yet.</p>
+          )}
+        </div>
+
+        <h2 className="section-title">Investors Interested</h2>
+
+        <div className="grid grid-2" style={{ marginBottom: "24px" }}>
+          {startup.investorsInterested && startup.investorsInterested.length > 0 ? (
+            startup.investorsInterested.map((investor) => (
+              <div
+                className="card"
+                key={investor._id}
+                style={{ cursor: "pointer" }}
+                onClick={() => setSelectedUser(investor)}
+              >
+                <h4>
+                  {investor.name}
+                  {investor.verified && (
+                    <span className="verified-badge">✔ Verified</span>
+                  )}
+                </h4>
+
+                <p className="muted">{investor.email}</p>
+              </div>
+            ))
+          ) : (
+            <p className="muted">No investors linked yet.</p>
+          )}
+        </div>
+
         {user?.role === "founder" && (
           <div className="card" style={{ marginBottom: "24px" }}>
             <h3 className="section-title">Update Progress</h3>
@@ -271,32 +336,32 @@ function StartupPortfolio() {
         )}
 
         {user?.role === "investor" && (
-        <div className="card" style={{ marginBottom: "24px" }}>
-          <h3 className="section-title">Investor Action</h3>
+          <div className="card" style={{ marginBottom: "24px" }}>
+            <h3 className="section-title">Investor Action</h3>
 
-          {investorAlreadyLinked ? (
-            <>
-              <p className="muted" style={{ marginBottom: "12px" }}>
-                You are already connected to this startup through an accepted funding request.
-              </p>
+            {investorAlreadyLinked ? (
+              <>
+                <p className="muted" style={{ marginBottom: "12px" }}>
+                  You are already connected to this startup through an accepted funding request.
+                </p>
 
-              <button className="btn btn-secondary" disabled>
-                Funding Request Accepted
-              </button>
-            </>
-          ) : (
-            <>
-              <p className="muted" style={{ marginBottom: "12px" }}>
-                Show interest in this startup to support its growth.
-              </p>
+                <button className="btn btn-secondary" disabled>
+                  Funding Request Accepted
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="muted" style={{ marginBottom: "12px" }}>
+                  Show interest in this startup to support its growth.
+                </p>
 
-              <button className="btn btn-primary" onClick={showInterest}>
-                Show Interest
-              </button>
-            </>
-          )}
-        </div>
-      )}
+                <button className="btn btn-primary" onClick={showInterest}>
+                  Show Interest
+                </button>
+              </>
+            )}
+          </div>
+        )}
 
         <h2 className="section-title">Mentor Reviews</h2>
 
@@ -310,6 +375,11 @@ function StartupPortfolio() {
           )}
         </div>
       </div>
+
+      <UserInfoModal
+        user={selectedUser}
+        onClose={() => setSelectedUser(null)}
+      />
     </>
   );
 }
