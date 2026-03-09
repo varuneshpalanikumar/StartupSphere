@@ -1,0 +1,43 @@
+import { Link, useNavigate } from "react-router-dom";
+
+function Navbar() {
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
+  return (
+    <div className="navbar">
+      <div className="navbar-inner">
+        <Link to="/" className="brand">
+          StartupSphere
+        </Link>
+
+        <div className="nav-links">
+          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/search-users">Search Users</Link>
+          <Link to="/search-startups">Search Startups</Link>
+          <Link to="/top-startups">Leaderboard</Link>
+
+          {user ? (
+            <button className="btn btn-secondary" onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/signup">Signup</Link>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Navbar;
