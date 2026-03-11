@@ -6,7 +6,7 @@ function FounderStartups() {
 
   const [startups, setStartups] = useState([]);
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(sessionStorage.getItem("user"));
 
   useEffect(() => {
     if (!user) return;

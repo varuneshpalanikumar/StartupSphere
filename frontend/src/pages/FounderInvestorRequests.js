@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import API from "../services/api";
 
 function FounderInvestorRequests() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(sessionStorage.getItem("user"));
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {

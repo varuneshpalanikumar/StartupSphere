@@ -11,7 +11,7 @@ function SearchUsers() {
   const queryParams = new URLSearchParams(location.search);
   const roleFromUrl = queryParams.get("role") || "";
 
-  const loggedInUser = JSON.parse(localStorage.getItem("user"));
+  const loggedInUser = JSON.parse(sessionStorage.getItem("user"));
 
   const [users, setUsers] = useState([]);
   const [founderStartups, setFounderStartups] = useState([]);
