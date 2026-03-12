@@ -13,7 +13,22 @@ function Dashboard() {
     const storedUser = JSON.parse(sessionStorage.getItem("user"));
     if (storedUser) {
       setUser(storedUser);
+
+      if (storedUser.role === "founder") {
+        document.title = "Founder • StartupSphere";
+      } else if (storedUser.role === "professional") {
+        document.title = "Professional • StartupSphere";
+      } else if (storedUser.role === "mentor") {
+        document.title = "Mentor • StartupSphere";
+      } else if (storedUser.role === "investor") {
+        document.title = "Investor • StartupSphere";
+      } else {
+        document.title = "StartupSphere";
+      }
+    } else {
+      document.title = "StartupSphere";
     }
+
   }, []);
 
   if (!user) {
