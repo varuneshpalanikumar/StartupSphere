@@ -75,7 +75,7 @@ function CreateStartup() {
       <Navbar />
 
       <div className="page-container">
-        <div className="card" style={{ maxWidth: "700px", margin: "20px auto" }}>
+        <div className="card clickable-card" style={{ maxWidth: "700px", margin: "20px auto" }}>
           <h1 className="page-title">Create Startup</h1>
           <p className="page-subtitle">
             Publish your startup idea and request the support you need.

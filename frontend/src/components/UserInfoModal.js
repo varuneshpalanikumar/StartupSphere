@@ -1,42 +1,24 @@
 function UserInfoModal({ user, onClose }) {
   if (!user) return null;
 
+  const portfolioLink =
+    user.portfolio && user.portfolio.startsWith("http")
+      ? user.portfolio
+      : user.portfolio
+      ? `https://${user.portfolio}`
+      : "";
+
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.45)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 1000
-      }}
-    >
+    <div className="modal-overlay" onClick={onClose}>
       <div
-        className="card"
-        style={{
-          width: "90%",
-          maxWidth: "500px",
-          position: "relative"
-        }}
+        className="modal"
+        onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          style={{
-            position: "absolute",
-            top: "12px",
-            right: "12px",
-            border: "none",
-            background: "transparent",
-            fontSize: "20px",
-            cursor: "pointer"
-          }}
-        >
+        <button className="modal-close" onClick={onClose}>
           ×
         </button>
 
-        <h2 style={{ marginBottom: "10px" }}>
+        <h2>
           {user.name}
           {user.verified && (
             <span className="verified-badge">✔ Verified</span>
@@ -57,11 +39,11 @@ function UserInfoModal({ user, onClose }) {
           </p>
         )}
 
-        {user.portfolio && (
+        {portfolioLink && (
           <p style={{ marginTop: "10px" }}>
             <strong>Portfolio:</strong>{" "}
-            <a href={user.portfolio} target="_blank" rel="noreferrer">
-              View
+            <a href={portfolioLink} target="_blank" rel="noreferrer">
+              View Profile
             </a>
           </p>
         )}

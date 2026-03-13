@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function StartupCard({ startup }) {
   return (
-    <div className="card">
+    <div className="card clickable-card">
       <h3>{startup.title}</h3>
 
       <p className="muted" style={{ margin: "8px 0 12px" }}>

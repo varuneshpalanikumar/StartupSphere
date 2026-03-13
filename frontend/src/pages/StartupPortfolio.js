@@ -159,7 +159,7 @@ function StartupPortfolio() {
           Founded by {startup.founder?.name || "Unknown Founder"}
         </p>
 
-        <div className="card" style={{ marginBottom: "20px" }}>
+        <div className="card clickable-card" style={{ marginBottom: "20px" }}>
           <p><strong>Description:</strong> {startup.description}</p>
           <p style={{ marginTop: "12px" }}>
             <strong>Latest Update:</strong> {startup.latestUpdate || "No updates yet"}
@@ -184,7 +184,7 @@ function StartupPortfolio() {
           {startup.mentorsJoined && startup.mentorsJoined.length > 0 ? (
             startup.mentorsJoined.map((mentor) => (
               <div
-                className="card"
+                className="card clickable-card"
                 key={mentor._id}
                 style={{ cursor: "pointer" }}
                 onClick={() => setSelectedUser(mentor)}
@@ -210,7 +210,7 @@ function StartupPortfolio() {
           {startup.professionalsJoined && startup.professionalsJoined.length > 0 ? (
             startup.professionalsJoined.map((professional) => (
               <div
-                className="card"
+                className="card clickable-card"
                 key={professional._id}
                 style={{ cursor: "pointer" }}
                 onClick={() => setSelectedUser(professional)}
@@ -236,7 +236,7 @@ function StartupPortfolio() {
           {startup.investorsInterested && startup.investorsInterested.length > 0 ? (
             startup.investorsInterested.map((investor) => (
               <div
-                className="card"
+                className="card clickable-card"
                 key={investor._id}
                 style={{ cursor: "pointer" }}
                 onClick={() => setSelectedUser(investor)}
@@ -257,7 +257,7 @@ function StartupPortfolio() {
         </div>
 
         {user?.role === "founder" && (
-          <div className="card" style={{ marginBottom: "24px" }}>
+          <div className="card clickable-card" style={{ marginBottom: "24px" }}>
             <h3 className="section-title">Update Progress</h3>
 
             <div className="input-group">
@@ -292,7 +292,7 @@ function StartupPortfolio() {
         )}
 
         {user?.role === "mentor" && startup.mentorReviewRequested && (
-          <div className="card" style={{ marginBottom: "24px" }}>
+          <div className="card clickable-card" style={{ marginBottom: "24px" }}>
             <h3 className="section-title">Add Mentor Review</h3>
 
             <div className="input-group">
@@ -323,7 +323,7 @@ function StartupPortfolio() {
         )}
 
         {user?.role === "professional" && (
-          <div className="card" style={{ marginBottom: "24px" }}>
+          <div className="card clickable-card" style={{ marginBottom: "24px" }}>
             <h3 className="section-title">Join This Startup</h3>
             <p className="muted" style={{ marginBottom: "12px" }}>
               Request to join and contribute your technical skills.
@@ -336,7 +336,7 @@ function StartupPortfolio() {
         )}
 
         {user?.role === "investor" && (
-          <div className="card" style={{ marginBottom: "24px" }}>
+          <div className="card clickable-card" style={{ marginBottom: "24px" }}>
             <h3 className="section-title">Investor Action</h3>
 
             {investorAlreadyLinked ? (

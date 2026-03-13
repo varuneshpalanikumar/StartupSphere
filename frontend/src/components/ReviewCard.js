@@ -2,7 +2,7 @@ function ReviewCard({ review }) {
   const mentor = review.mentor;
 
   return (
-    <div className="card">
+    <div className="card clickable-card">
       <h4>
         {mentor?.name || "Mentor"}
 

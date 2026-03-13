@@ -67,7 +67,7 @@ function SearchStartups() {
         Discover startups based on support needs, score, and progress.
       </p>
 
-      <div className="card" style={{ marginBottom: "20px" }}>
+      <div className="card clickable-card" style={{ marginBottom: "20px" }}>
         <div className="grid grid-3">
           <div className="input-group">
             <label>Title</label>

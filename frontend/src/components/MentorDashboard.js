@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function MentorDashboard() {
   return (
     <div className="grid grid-3">
-      <div className="card">
+      <div className="card clickable-card">
         <h3>Review Startups</h3>
         <p>Browse startups and provide reviews.</p>
 
@@ -12,7 +12,7 @@ function MentorDashboard() {
         </Link>
       </div>
 
-      <div className="card">
+      <div className="card clickable-card">
         <h3>Mentor Requests</h3>
         <p>See direct review and mentorship requests from founders.</p>
 

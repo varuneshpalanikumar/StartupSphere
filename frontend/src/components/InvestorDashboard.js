@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function InvestorDashboard() {
   return (
     <div className="grid grid-3">
-      <div className="card">
+      <div className="card clickable-card">
         <h3>Explore Startups</h3>
         <p>Find promising startups to invest in.</p>
 
@@ -14,7 +14,7 @@ function InvestorDashboard() {
         </Link>
       </div>
 
-      <div className="card">
+      <div className="card clickable-card">
         <h3>Funding Requests</h3>
         <p>Review funding requests sent by founders.</p>
 
@@ -25,7 +25,7 @@ function InvestorDashboard() {
         </Link>
       </div>
 
-      <div className="card">
+      <div className="card clickable-card">
         <h3>High Score Startups</h3>
         <p>See startups with the highest startup score.</p>
 

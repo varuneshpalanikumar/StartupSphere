@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
-
   const user = JSON.parse(sessionStorage.getItem("user"));
 
   const handleLogout = () => {
@@ -15,13 +14,14 @@ function Navbar() {
     <div className="navbar">
       <div className="navbar-inner">
         <Link to="/" className="brand">
-          StartupSphere
+          <img src="/logo.png" alt="StartupSphere Logo" className="brand-logo" />
+          <span>StartupSphere</span>
         </Link>
 
         <div className="nav-links">
           <Link to="/dashboard">Dashboard</Link>
-          <Link to="/search-users">Search Users</Link>
-          <Link to="/search-startups">Search Startups</Link>
+          <Link to="/search-users">People</Link>
+          <Link to="/search-startups">Startups</Link>
           <Link to="/top-startups">Leaderboard</Link>
 
           {user ? (

@@ -60,7 +60,7 @@ function MentorRequests() {
         ) : (
           <div className="grid grid-2">
             {requests.map((request) => (
-              <div className="card" key={request._id}>
+              <div className="card clickable-card" key={request._id}>
                 <h3>{request.startup?.title}</h3>
                 <p className="muted" style={{ marginBottom: "10px" }}>
                   Founder: {request.founder?.name}

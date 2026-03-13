@@ -7,23 +7,22 @@ function Home() {
       <Navbar />
 
       <div className="page-container">
-
         <div className="hero">
-
           <img
             src="/logo.png"
             alt="StartupSphere Logo"
-            style={{ width: "90px", marginBottom: "15px" }}
+            className="hero-logo"
           />
 
           <h1>StartupSphere</h1>
 
-          <p style={{ fontSize: "18px", marginBottom: "10px" }}>
+          <p className="hero-tagline">
             Where Startups Find the Support to Succeed
           </p>
 
           <p>
-            A collaborative ecosystem for founders, professionals, mentors, and investors.
+            A modern ecosystem where founders connect with professionals,
+            mentors, and investors to build, validate, and scale promising ventures.
           </p>
 
           <div className="action-row">
@@ -32,44 +31,44 @@ function Home() {
             </Link>
 
             <Link to="/signup">
-              <button className="btn btn-secondary">Signup</button>
+              <button className="btn btn-secondary">Create Account</button>
             </Link>
           </div>
-
         </div>
 
         <div className="grid grid-2">
-
           <div className="card role-card">
-            <h3>Founders</h3>
+            <h3>For Founders</h3>
             <p>
-              Create startups, search mentors and professionals, and build your startup portfolio.
+              Build startup portfolios, attract professionals, request mentor reviews,
+              and connect directly with investors.
             </p>
           </div>
 
           <div className="card role-card">
-            <h3>Professionals</h3>
+            <h3>For Professionals</h3>
             <p>
-              Discover startups that need technical support and request to join them.
+              Discover startups, join real projects, contribute technical expertise,
+              and help shape new ventures.
             </p>
           </div>
 
           <div className="card role-card">
-            <h3>Mentors</h3>
+            <h3>For Mentors</h3>
             <p>
-              Review startups, provide guidance, and help promising teams grow.
+              Review promising startups, accept mentorship requests, and guide founders
+              with experience and credibility.
             </p>
           </div>
 
           <div className="card role-card">
-            <h3>Investors</h3>
+            <h3>For Investors</h3>
             <p>
-              Discover high-potential startups through progress, mentor reviews, and startup score.
+              Explore high-potential startups through progress, reviews, and score,
+              then evaluate funding opportunities clearly.
             </p>
           </div>
-
         </div>
-
       </div>
     </>
   );

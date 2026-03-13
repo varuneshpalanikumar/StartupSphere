@@ -65,7 +65,7 @@ function Signup() {
   return (
     <div className="page-container">
 
-      <div className="card" style={{maxWidth:"500px",margin:"40px auto"}}>
+      <div className="card clickable-card" style={{maxWidth:"500px",margin:"40px auto"}}>
 
         <h2>Create Account</h2>
 

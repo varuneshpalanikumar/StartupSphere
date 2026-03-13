@@ -12,7 +12,7 @@ function UserCard({
 }) {
   return (
     <div
-      className="card"
+      className="card clickable-card"
       style={{ cursor: "pointer" }}
       onClick={() => onClick && onClick(user)}
     >

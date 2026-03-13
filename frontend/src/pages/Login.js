@@ -47,7 +47,7 @@ function Login() {
   return (
     <div className="page-container">
 
-      <div className="card" style={{maxWidth:"450px",margin:"40px auto"}}>
+      <div className="card clickable-card" style={{maxWidth:"450px",margin:"40px auto"}}>
 
         <h2>Login</h2>
 

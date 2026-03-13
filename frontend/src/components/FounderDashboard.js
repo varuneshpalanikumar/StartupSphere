@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function FounderDashboard() {
   return (
     <div className="grid grid-3">
-      <div className="card">
+      <div className="card clickable-card">
         <h3>Create Startup</h3>
         <p>Create and publish your startup idea.</p>
 
@@ -12,7 +12,7 @@ function FounderDashboard() {
         </Link>
       </div>
 
-      <div className="card">
+      <div className="card clickable-card">
         <h3>Search Mentors</h3>
         <p>Find mentors to review your startup.</p>
 
@@ -21,7 +21,7 @@ function FounderDashboard() {
         </Link>
       </div>
 
-      <div className="card">
+      <div className="card clickable-card">
         <h3>Search Professionals</h3>
         <p>Find professionals to support your startup technically.</p>
 
@@ -30,7 +30,7 @@ function FounderDashboard() {
         </Link>
       </div>
 
-      <div className="card">
+      <div className="card clickable-card">
         <h3>Search Investors</h3>
         <p>Find investors interested in promising startups.</p>
 
@@ -39,7 +39,7 @@ function FounderDashboard() {
         </Link>
       </div>
 
-      <div className="card">
+      <div className="card clickable-card">
         <h3>View Startups</h3>
         <p>Browse startup listings and portfolios.</p>
 
@@ -47,7 +47,7 @@ function FounderDashboard() {
           <button className="btn btn-secondary">Explore</button>
         </Link>
       </div>
-      <div className="card">
+      <div className="card clickable-card">
       <h3>Mentor Requests</h3>
       <p>Track review and mentorship requests sent to mentors.</p>
 
@@ -55,7 +55,7 @@ function FounderDashboard() {
       <button className="btn btn-secondary">View Requests</button>
       </Link>
       </div>
-      <div className="card">
+      <div className="card clickable-card">
         <h3>Funding Requests</h3>
         <p>Track funding requests sent to investors.</p>
 

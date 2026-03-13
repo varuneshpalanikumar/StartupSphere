@@ -20,7 +20,7 @@ function JoinRequestCard({ request, refresh }) {
   };
 
   return (
-    <div className="card">
+    <div className="card clickable-card">
       <h4>
         {request.professional?.name}
         {request.professional?.verified && (

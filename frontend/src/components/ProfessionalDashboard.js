@@ -6,7 +6,7 @@ function ProfessionalDashboard() {
 
     <div className="grid grid-3">
 
-      <div className="card">
+      <div className="card clickable-card">
         <h3>Discover Startups</h3>
         <p>Find startups that need technical support.</p>
 
@@ -17,7 +17,7 @@ function ProfessionalDashboard() {
         </Link>
       </div>
 
-      <div className="card">
+      <div className="card clickable-card">
       <h3>Joined Projects</h3>
       <p>View startups you joined.</p>
 
@@ -28,7 +28,7 @@ function ProfessionalDashboard() {
       </Link>
       </div>
 
-      <div className="card">
+      <div className="card clickable-card">
       <h3>Vote Join Requests</h3>
       <p>Vote on professional join requests.</p>
 

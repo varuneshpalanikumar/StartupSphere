@@ -25,9 +25,9 @@ function TopStartups() {
   };
 
   const getRankLabel = (index) => {
-    if (index === 0) return "🥇 Top Rated Startup";
-    if (index === 1) return "🥈 Strong Performer";
-    if (index === 2) return "🥉 Rising Startup";
+    if (index === 0) return "🥇";
+    if (index === 1) return "🥈";
+    if (index === 2) return "🥉";
     return `#${index + 1}`;
   };
 
@@ -46,7 +46,7 @@ function TopStartups() {
         ) : (
           <div className="grid grid-2">
             {startups.map((startup, index) => (
-              <div className="card" key={startup._id}>
+              <div className="card clickable-card" key={startup._id}>
                 <p
                   style={{
                     color: "#2563eb",

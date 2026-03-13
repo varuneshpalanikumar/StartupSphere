@@ -87,7 +87,7 @@ function VoteRequests() {
         ) : (
           <div className="grid grid-3" style={{ marginBottom: "30px" }}>
             {projects.map((project) => (
-              <div className="card" key={project._id}>
+              <div className="card clickable-card" key={project._id}>
                 <h3>{project.title}</h3>
                 <p className="muted" style={{ margin: "8px 0 12px" }}>
                   {project.description}
@@ -115,7 +115,7 @@ function VoteRequests() {
             ) : (
               <div className="grid grid-3">
                 {requests.map((request) => (
-                  <div className="card" key={request._id}>
+                  <div className="card clickable-card" key={request._id}>
                     <h3>
                       {request.professional?.name}
                       {request.professional?.verified && (

@@ -190,14 +190,21 @@ exports.voteJoinRequest = async (req, res) => {
       });
     }
 
-    if (existingVote && existingVote.voteType === voteType) {
-      return res.json({
-        message: "Vote already recorded"
-      });
+    if (!request.votes) {
+      request.votes = [];
     }
+
     const existingVote = request.votes.find(
       (vote) => vote.voter.toString() === voterId
     );
+
+    if (existingVote && existingVote.voteType === voteType) {
+      return res.json({
+        message: "Vote already recorded",
+        upVotes: request.upVotes,
+        downVotes: request.downVotes
+      });
+    }
 
     if (!existingVote) {
       request.votes.push({
@@ -208,8 +215,13 @@ exports.voteJoinRequest = async (req, res) => {
       existingVote.voteType = voteType;
     }
 
-    request.upVotes = request.votes.filter(v => v.voteType === "up").length;
-    request.downVotes = request.votes.filter(v => v.voteType === "down").length;
+    request.upVotes = request.votes.filter(
+      (vote) => vote.voteType === "up"
+    ).length;
+
+    request.downVotes = request.votes.filter(
+      (vote) => vote.voteType === "down"
+    ).length;
 
     await request.save();
 
