@@ -130,44 +130,35 @@ function CreateStartup() {
               />
             </div>
 
-            <div className="input-group">
-              <label>
-                <input
-                  type="checkbox"
-                  name="techSupportRequired"
-                  checked={form.techSupportRequired}
-                  onChange={handleChange}
-                  style={{ marginRight: "8px" }}
-                />
-                Technical Support Required
-              </label>
-            </div>
+            <div className="checkbox-row">
+  <input
+    type="checkbox"
+    name="techSupportRequired"
+    checked={form.techSupportRequired}
+    onChange={handleChange}
+  />
+  <label>Technical Support Required</label>
+</div>
 
-            <div className="input-group">
-              <label>
-                <input
-                  type="checkbox"
-                  name="mentorshipRequired"
-                  checked={form.mentorshipRequired}
-                  onChange={handleChange}
-                  style={{ marginRight: "8px" }}
-                />
-                Mentorship Required
-              </label>
-            </div>
+<div className="checkbox-row">
+  <input
+    type="checkbox"
+    name="mentorshipRequired"
+    checked={form.mentorshipRequired}
+    onChange={handleChange}
+  />
+  <label>Mentorship Required</label>
+</div>
 
-            <div className="input-group">
-              <label>
-                <input
-                  type="checkbox"
-                  name="mentorReviewRequested"
-                  checked={form.mentorReviewRequested}
-                  onChange={handleChange}
-                  style={{ marginRight: "8px" }}
-                />
-                Request Mentor Review
-              </label>
-            </div>
+<div className="checkbox-row">
+  <input
+    type="checkbox"
+    name="mentorReviewRequested"
+    checked={form.mentorReviewRequested}
+    onChange={handleChange}
+  />
+  <label>Request Mentor Review</label>
+</div>
 
             <button className="btn btn-primary" type="submit">
               Create Startup

@@ -299,3 +299,43 @@ exports.getFounderStartups = async (req, res) => {
   }
 
 };
+exports.getMentorStartups = async (req, res) => {
+  try {
+    const startups = await Startup.find({
+      mentorsJoined: req.params.mentorId
+    })
+      .populate("founder", "name email")
+      .populate("mentorsJoined", "name email role");
+
+    res.json(startups);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error fetching mentor startups",
+      error: error.message
+    });
+  }
+};
+exports.getInvestorStartups = async (req, res) => {
+  try {
+
+    const startups = await Startup.find({
+      investorsInterested: req.params.investorId
+    })
+      .populate("founder", "name email")
+      .populate("investorsInterested", "name email role");
+
+    res.json(startups);
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error fetching investor startups",
+      error: error.message
+    });
+
+  }
+};

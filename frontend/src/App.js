@@ -15,6 +15,9 @@ import MentorRequests from "./pages/MentorRequests";
 import FounderMentorRequests from "./pages/FounderMentorRequests";
 import InvestorRequests from "./pages/InvestorRequests";
 import FounderInvestorRequests from "./pages/FounderInvestorRequests";
+import MentorStartups from "./pages/MentorStartups";
+import InvestorStartups from "./pages/InvestorStartups";
+import MyJoinRequests from "./pages/MyJoinRequests";
 import "./styles/main.css";
 
 
@@ -39,6 +42,9 @@ function App() {
         <Route path="/founder-mentor-requests" element={<FounderMentorRequests />} />
         <Route path="/investor-requests" element={<InvestorRequests />} />
         <Route path="/founder-investor-requests" element={<FounderInvestorRequests />} />
+        <Route path="/mentor-startups" element={<MentorStartups />} />
+        <Route path="/investor-startups" element={<InvestorStartups />} />
+        <Route path="/my-join-requests" element={<MyJoinRequests />} />
       </Routes>
     </Router>
   );

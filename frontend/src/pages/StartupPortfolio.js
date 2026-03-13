@@ -11,6 +11,8 @@ function StartupPortfolio() {
 
   const [data, setData] = useState(null);
   const [user, setUser] = useState(null);
+  const [message, setMessage] = useState("");
+const [isError, setIsError] = useState(false);
 
   const [reviewForm, setReviewForm] = useState({
     rating: "",
@@ -21,6 +23,8 @@ function StartupPortfolio() {
     progress: "",
     latestUpdate: ""
   });
+  const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -47,60 +51,105 @@ function StartupPortfolio() {
     }
   };
 
-  const handleReviewChange = (e) => {
-    setReviewForm({
-      ...reviewForm,
-      [e.target.name]: e.target.value
-    });
-  };
 
-  const handleProgressChange = (e) => {
-    setProgressForm({
-      ...progressForm,
-      [e.target.name]: e.target.value
-    });
-  };
+ const handleReviewChange = (e) => {
+  let value = e.target.value;
 
-  const submitReview = async () => {
-    if (!user) return;
+  if (e.target.name === "rating") {
 
-    try {
-      await API.post("/reviews/add", {
-        startupId: id,
-        mentorId: user._id,
-        rating: Number(reviewForm.rating),
-        comment: reviewForm.comment
-      });
-
+    // allow empty input while typing
+    if (value === "") {
       setReviewForm({
-        rating: "",
-        comment: ""
+        ...reviewForm,
+        rating: value
       });
-
-      fetchStartupDetails();
-      alert("Review submitted");
-    } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.message || "Failed to submit review");
+      return;
     }
-  };
 
-  const updateProgress = async () => {
-    try {
-      await API.put(`/startups/progress/${id}`, {
-        progress: Number(progressForm.progress),
-        latestUpdate: progressForm.latestUpdate
-      });
+    value = Number(value);
 
-      await API.get(`/startups/score/${id}`);
-      fetchStartupDetails();
+    if (value > 5) value = 5;
+    if (value < 1) value = 1;
+  }
 
-      alert("Progress updated");
-    } catch (error) {
-      console.error(error);
-      alert("Failed to update progress");
-    }
-  };
+  setReviewForm({
+    ...reviewForm,
+    [e.target.name]: value
+  });
+};
+const handleProgressChange = (e) => {
+  let value = e.target.value;
+
+  if (e.target.name === "progress") {
+    value = Math.min(100, Math.max(0, value));
+  }
+
+  setProgressForm({
+    ...progressForm,
+    [e.target.name]: value
+  });
+};
+const submitReview = async () => {
+  if (!user) return;
+
+  try {
+    const res = await API.post("/reviews/add", {
+      startupId: id,
+      mentorId: user._id,
+      rating: Number(reviewForm.rating),
+      comment: reviewForm.comment
+    });
+
+    setIsError(false);
+    setMessage(res.data?.message || "Review submitted successfully");
+
+    setReviewForm({
+      rating: "",
+      comment: ""
+    });
+
+    fetchStartupDetails();
+
+    setTimeout(() => {
+      setMessage("");
+    }, 2000);
+
+  } catch (error) {
+    console.error(error);
+
+    setIsError(true);
+    setMessage(
+      error.response?.data?.message || "Failed to submit review"
+    );
+
+    setTimeout(() => {
+      setMessage("");
+    }, 2000);
+  }
+};
+
+const updateProgress = async () => {
+  try {
+    await API.put(`/startups/progress/${id}`, {
+      progress: Number(progressForm.progress),
+      latestUpdate: progressForm.latestUpdate
+    });
+
+    await API.get(`/startups/score/${id}`);
+    fetchStartupDetails();
+
+    setSuccessMsg("Startup progress updated successfully 🚀");
+    setTimeout(() => {
+      setSuccessMsg("");
+    }, 2000);
+    setErrorMsg("");
+
+  } catch (error) {
+    console.error(error);
+    setErrorMsg("Failed to update progress");
+    setSuccessMsg("");
+  }
+};
 
   const requestJoin = async () => {
     if (!user) return;
@@ -171,7 +220,7 @@ function StartupPortfolio() {
           <StatCard title="Startup Score" value={startup.startupScore} />
           <StatCard title="Investors Interested" value={investorCount} />
           <StatCard title="Team Size" value={teamSize} />
-          <StatCard title="Funding Required" value={`$${startup.fundingRequired}`} />
+          <StatCard title="Funding Required" value={`₹${startup.fundingRequired}`} />
         </div>
 
         <p className="muted" style={{ marginBottom: "16px" }}>
@@ -261,14 +310,16 @@ function StartupPortfolio() {
             <h3 className="section-title">Update Progress</h3>
 
             <div className="input-group">
-              <label>Progress (%)</label>
-              <input
-                type="number"
-                name="progress"
-                value={progressForm.progress}
-                onChange={handleProgressChange}
-              />
-            </div>
+            <label>Progress (%)</label>
+            <input
+              type="number"
+              name="progress"
+              min="0"
+              max="100"
+              value={progressForm.progress}
+              onChange={handleProgressChange}
+            />
+          </div>
 
             <div className="input-group">
               <label>Latest Update</label>
@@ -278,7 +329,8 @@ function StartupPortfolio() {
                 onChange={handleProgressChange}
               />
             </div>
-
+            {successMsg && <div className="alert-success">{successMsg}</div>}
+            {errorMsg && <div className="alert-error">{errorMsg}</div>}
             <button className="btn btn-primary" onClick={updateProgress}>
               Save Progress
             </button>
@@ -294,18 +346,22 @@ function StartupPortfolio() {
         {user?.role === "mentor" && startup.mentorReviewRequested && (
           <div className="card clickable-card" style={{ marginBottom: "24px" }}>
             <h3 className="section-title">Add Mentor Review</h3>
-
+            {message && (
+              <div className={isError ? "alert-error" : "alert-success"}>
+                {message}
+              </div>
+            )}
             <div className="input-group">
-              <label>Rating</label>
-              <input
-                type="number"
-                name="rating"
-                min="1"
-                max="5"
-                value={reviewForm.rating}
-                onChange={handleReviewChange}
-              />
-            </div>
+            <label>Rating</label>
+            <input
+              type="number"
+              name="rating"
+              min="1"
+              max="5"
+              value={reviewForm.rating}
+              onChange={handleReviewChange}
+            />
+          </div>
 
             <div className="input-group">
               <label>Comment</label>
@@ -364,7 +420,7 @@ function StartupPortfolio() {
         )}
 
         <h2 className="section-title">Mentor Reviews</h2>
-
+        
         <div className="grid grid-2">
           {reviews.length > 0 ? (
             reviews.map((review) => (

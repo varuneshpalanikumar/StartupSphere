@@ -15,7 +15,7 @@ function SearchUsers() {
 
   const [users, setUsers] = useState([]);
   const [founderStartups, setFounderStartups] = useState([]);
-  const [selectedStartupId, setSelectedStartupId] = useState("");
+  const [selectedStartupByUser, setSelectedStartupByUser] = useState({});
   const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -26,11 +26,27 @@ function SearchUsers() {
     name: ""
   });
 
+  const showMessage = (text, error = false) => {
+    setIsError(error);
+    setMessage(text);
+
+    setTimeout(() => {
+      setMessage("");
+    }, 2000);
+  };
+
   const handleChange = (e) => {
     setFilters({
       ...filters,
       [e.target.name]: e.target.value
     });
+  };
+
+  const handleStartupChange = (userId, startupId) => {
+    setSelectedStartupByUser((prev) => ({
+      ...prev,
+      [userId]: startupId
+    }));
   };
 
   const searchUsers = async (customFilters = filters) => {
@@ -45,6 +61,7 @@ function SearchUsers() {
       setUsers(res.data);
     } catch (error) {
       console.error(error);
+      showMessage("Failed to search users", true);
     }
   };
 
@@ -56,6 +73,7 @@ function SearchUsers() {
       setFounderStartups(res.data);
     } catch (error) {
       console.error(error);
+      showMessage("Failed to fetch your startups", true);
     }
   };
 
@@ -80,14 +98,14 @@ function SearchUsers() {
 
   const sendMentorRequest = async (mentorId, requestType) => {
     if (!loggedInUser || loggedInUser.role !== "founder") {
-      setIsError(true);
-      setMessage("Only founders can send mentor requests");
+      showMessage("Only founders can send mentor requests", true);
       return;
     }
 
+    const selectedStartupId = selectedStartupByUser[mentorId];
+
     if (!selectedStartupId) {
-      setIsError(true);
-      setMessage("Please select one of your startups first");
+      showMessage("Please select one of your startups first", true);
       return;
     }
 
@@ -103,33 +121,32 @@ function SearchUsers() {
             : "We would like mentorship support for this startup."
       });
 
-      setIsError(false);
-      setMessage(
+      showMessage(
         requestType === "review"
           ? "Review request sent successfully"
           : "Mentorship request sent successfully"
       );
     } catch (error) {
       console.error(error);
-      setIsError(true);
-      setMessage(
+      showMessage(
         error.response?.data?.message ||
-        error.response?.data?.error ||
-        "Failed to send mentor request"
+          error.response?.data?.error ||
+          "Failed to send mentor request",
+        true
       );
     }
   };
 
   const sendFundingRequest = async (investorId) => {
     if (!loggedInUser || loggedInUser.role !== "founder") {
-      setIsError(true);
-      setMessage("Only founders can send funding requests");
+      showMessage("Only founders can send funding requests", true);
       return;
     }
 
+    const selectedStartupId = selectedStartupByUser[investorId];
+
     if (!selectedStartupId) {
-      setIsError(true);
-      setMessage("Please select one of your startups first");
+      showMessage("Please select one of your startups first", true);
       return;
     }
 
@@ -141,15 +158,14 @@ function SearchUsers() {
         message: "We would like to request funding support for this startup."
       });
 
-      setIsError(false);
-      setMessage("Funding request sent successfully");
+      showMessage("Funding request sent successfully");
     } catch (error) {
       console.error(error);
-      setIsError(true);
-      setMessage(
+      showMessage(
         error.response?.data?.message ||
-        error.response?.data?.error ||
-        "Failed to send funding request"
+          error.response?.data?.error ||
+          "Failed to send funding request",
+        true
       );
     }
   };
@@ -162,16 +178,7 @@ function SearchUsers() {
         <h1 className="page-title">{getTitle()}</h1>
 
         {message && (
-          <div
-            style={{
-              marginBottom: "16px",
-              padding: "12px",
-              borderRadius: "10px",
-              background: isError ? "#fee2e2" : "#dcfce7",
-              color: isError ? "#b91c1c" : "#166534",
-              fontWeight: "600"
-            }}
-          >
+          <div className={isError ? "alert-error" : "alert-success"}>
             {message}
           </div>
         )}
@@ -231,14 +238,22 @@ function SearchUsers() {
               key={user._id}
               user={user}
               onClick={setSelectedUser}
-              showMentorActions={loggedInUser?.role === "founder" && filters.role === "mentor"}
-              showInvestorActions={loggedInUser?.role === "founder" && filters.role === "investor"}
+              showMentorActions={
+                loggedInUser?.role === "founder" && filters.role === "mentor"
+              }
+              showInvestorActions={
+                loggedInUser?.role === "founder" && filters.role === "investor"
+              }
               founderStartups={founderStartups}
-              selectedStartupId={selectedStartupId}
-              onStartupChange={setSelectedStartupId}
-              onSendReviewRequest={(mentorId) => sendMentorRequest(mentorId, "review")}
-              onSendMentorshipRequest={(mentorId) => sendMentorRequest(mentorId, "mentorship")}
-              onSendFundingRequest={(investorId) => sendFundingRequest(investorId)}
+              selectedStartupId={selectedStartupByUser[user._id] || ""}
+              onStartupChange={(startupId) =>
+                handleStartupChange(user._id, startupId)
+              }
+              onSendReviewRequest={() => sendMentorRequest(user._id, "review")}
+              onSendMentorshipRequest={() =>
+                sendMentorRequest(user._id, "mentorship")
+              }
+              onSendFundingRequest={() => sendFundingRequest(user._id)}
             />
           ))}
         </div>

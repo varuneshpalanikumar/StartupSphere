@@ -19,7 +19,9 @@ function Navbar() {
         </Link>
 
         <div className="nav-links">
-          <Link to="/dashboard">Dashboard</Link>
+          <Link to={user ? "/dashboard" : "/"}>
+    Dashboard
+  </Link>
           <Link to="/search-users">People</Link>
           <Link to="/search-startups">Startups</Link>
           <Link to="/top-startups">Leaderboard</Link>

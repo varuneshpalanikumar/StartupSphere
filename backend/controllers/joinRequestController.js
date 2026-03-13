@@ -240,3 +240,24 @@ exports.voteJoinRequest = async (req, res) => {
     });
   }
 };
+
+// PROFESSIONAL VIEWS REQUESTS SENT BY THEM
+exports.getProfessionalJoinRequests = async (req, res) => {
+  try {
+    const requests = await JoinRequest.find({
+      professional: req.params.professionalId
+    })
+      .populate("startup", "title description progress startupScore")
+      .populate("professional", "name email");
+
+    res.json(requests);
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error fetching professional join requests",
+      error: error.message
+    });
+  }
+};

@@ -22,7 +22,7 @@ function StartupCard({ startup }) {
       </p>
 
       <p>
-        <strong>Funding Required:</strong> ${startup.fundingRequired}
+        <strong>Funding Required:</strong> {startup.fundingRequired}
       </p>
 
       <div style={{ marginTop: "16px" }}>

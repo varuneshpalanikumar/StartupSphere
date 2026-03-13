@@ -164,3 +164,21 @@ exports.rejectInvestorRequest = async (req, res) => {
     });
   }
 };
+const handleRequestAction = async (requestId, action) => {
+  try {
+    await API.put(`/investor-requests/${action}/${requestId}`);
+
+    setIsError(false);
+    setMessage(
+      action === "accept"
+        ? "Funding request accepted successfully"
+        : "Funding request rejected successfully"
+    );
+
+    fetchRequests();
+  } catch (error) {
+    console.error(error);
+    setIsError(true);
+    setMessage("Failed to update funding request");
+  }
+};

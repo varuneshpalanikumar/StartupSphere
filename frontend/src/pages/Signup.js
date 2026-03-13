@@ -74,7 +74,7 @@ function Signup() {
             marginBottom:"15px",
             padding:"10px",
             borderRadius:"8px",
-            background: isError ? "#ffdada" : "#d4f7d4"
+            background: isError ? "#6d1010" : "#28a328"
           }}>
             {message}
           </div>
