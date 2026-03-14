@@ -47,6 +47,17 @@ html {
   scroll-behavior: smooth;
 }
 
+textarea {
+  width: 100%;
+  min-height: 80px;
+  resize: vertical;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #0f0f0f;
+  color: white;
+}
+
 body {
   min-height: 100vh;
   color: var(--text);
@@ -844,4 +855,39 @@ input[type="number"] {
 
 .toggle-password:hover {
   color: var(--primary-2);
+}
+.modal-card p{
+margin-top:6px;
+line-height:1.5;
+}
+.role-badge{
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:600;
+text-transform:capitalize;
+}
+
+/* Founder */
+.role-founder{
+background:#7c3aed;
+color:white;
+}
+
+/* Professional */
+.role-professional{
+background:#2563eb;
+color:white;
+}
+
+/* Mentor */
+.role-mentor{
+background:#059669;
+color:white;
+}
+
+/* Investor */
+.role-investor{
+background:#f59e0b;
+color:black;
 }

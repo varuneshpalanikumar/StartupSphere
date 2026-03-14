@@ -18,20 +18,27 @@ function UserInfoModal({ user, onClose }) {
           ×
         </button>
 
-        <h2>
-          {user.name}
-          {user.verified && (
-            <span className="verified-badge">✔ Verified</span>
-          )}
-        </h2>
+        <h2 style={{display:"flex",alignItems:"center",gap:"10px"}}>
+  {user.name}
 
-        <p className="muted" style={{ marginBottom: "14px" }}>
-          {user.role}
-        </p>
+  <span className={`role-badge role-${user.role}`}>
+    {user.role}
+  </span>
 
+  {user.verified && (
+    <span className="verified-badge">✔ Verified</span>
+  )}
+</h2>
         <p>
           <strong>Email:</strong> {user.email || "Not available"}
         </p>
+
+        <div style={{ marginTop: "10px" }}>
+  <strong>Bio:</strong>
+  <p className="muted" style={{ marginTop: "6px" }}>
+    {user.bio || "No bio provided"}
+  </p>
+</div>
 
         {user.skills && user.skills.length > 0 && (
           <p style={{ marginTop: "10px" }}>

@@ -7,13 +7,14 @@ function Signup() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "founder",
-    skills: "",
-    portfolio: ""
-  });
+  name: "",
+  email: "",
+  password: "",
+  role: "founder",
+  skills: "",
+  portfolio: "",
+  bio: ""
+});
 
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -33,12 +34,13 @@ function Signup() {
     try {
 
       const payload = {
-        name: form.name,
-        email: form.email,
-        password: form.password,
-        role: form.role,
-        portfolio: form.portfolio
-      };
+  name: form.name,
+  email: form.email,
+  password: form.password,
+  role: form.role,
+  portfolio: form.portfolio,
+  bio: form.bio
+};
 
       if (form.role === "professional") {
         payload.skills = form.skills.split(",").map(s => s.trim());
@@ -171,7 +173,21 @@ function Signup() {
               />
             </div>
           )}
+<div className="input-group">
+  <label>Bio</label>
 
+  <textarea
+    name="bio"
+    value={form.bio}
+    onChange={handleChange}
+    placeholder="Tell others about yourself..."
+    maxLength="300"
+  />
+
+  <small className="muted">
+    {form.bio.length}/300 characters
+  </small>
+</div>
           <button className="btn btn-primary">
             Signup
           </button>

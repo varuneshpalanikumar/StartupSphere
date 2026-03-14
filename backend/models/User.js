@@ -34,6 +34,11 @@ const userSchema = new mongoose.Schema({
     default: false
   },
 
+  bio: {
+    type: String,
+    default: ""
+  },
+
   joinedProjects: [
     {
       type: mongoose.Schema.Types.ObjectId,
