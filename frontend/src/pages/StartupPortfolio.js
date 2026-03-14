@@ -210,6 +210,9 @@ function StartupPortfolio() {
   }
 
   const { startup, reviews, investorCount, teamSize } = data;
+  const isStartupOwner =
+  user?.role === "founder" &&
+  startup?.founder?._id === user?._id;
 
   const investorAlreadyLinked =
     user?.role === "investor" &&
@@ -332,7 +335,7 @@ function StartupPortfolio() {
           )}
         </div>
 
-        {user?.role === "founder" && (
+        {isStartupOwner && (
           <div className="card clickable-card" style={{ marginBottom: "24px" }}>
             <h3 className="section-title">Update Progress</h3>
 
