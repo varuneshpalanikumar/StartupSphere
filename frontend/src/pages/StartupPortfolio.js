@@ -12,6 +12,8 @@ function StartupPortfolio() {
   const [data, setData] = useState(null);
   const [user, setUser] = useState(null);
 
+  const [joinStatus, setJoinStatus] = useState("none");
+
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
@@ -50,6 +52,19 @@ function StartupPortfolio() {
 
   const fetchStartupDetails = async () => {
     try {
+      if (user?.role === "professional") {
+        try {
+
+          const res = await API.get(
+            `/join-requests/status/${id}/${user._id}`
+          );
+
+          setJoinStatus(res.data.status);
+
+        } catch (error) {
+          console.error(error);
+        }
+}
       const res = await API.get(`/startups/details/${id}`);
       setData(res.data);
 
@@ -173,7 +188,7 @@ function StartupPortfolio() {
         professionalId: user._id,
         message: "I would like to contribute to this startup."
       });
-
+      setJoinStatus("pending");
       showMessage(res.data?.message || "Join request sent successfully");
     } catch (error) {
       console.error(error);
@@ -210,6 +225,11 @@ function StartupPortfolio() {
   }
 
   const { startup, reviews, investorCount, teamSize } = data;
+  const professionalAlreadyJoined =
+  user?.role === "professional" &&
+  startup.professionalsJoined?.some(
+    (professional) => professional._id === user._id
+  );
   const isStartupOwner =
   user?.role === "founder" &&
   startup?.founder?._id === user?._id;
@@ -375,77 +395,109 @@ function StartupPortfolio() {
           </div>
         )}
 
-        {user?.role === "mentor" && startup.mentorReviewRequested && (
-          <div className="card clickable-card" style={{ marginBottom: "24px" }}>
-            <h3 className="section-title">Add Mentor Review</h3>
+        {user?.role === "mentor" && (
+  <div className="card clickable-card" style={{ marginBottom: "24px" }}>
+    <h3 className="section-title">Mentor Review</h3>
 
-            <div className="input-group">
-              <label>Rating</label>
-              <input
-                type="number"
-                name="rating"
-                min="1"
-                max="5"
-                value={reviewForm.rating}
-                onChange={handleReviewChange}
-              />
-            </div>
+    {!startup.mentorReviewRequested ? (
+      <div className="alert-error">
+        This startup is not requesting mentor reviews.
+      </div>
+    ) : (
+      <>
+        <div className="input-group">
+          <label>Rating</label>
+          <input
+            type="number"
+            name="rating"
+            min="1"
+            max="5"
+            value={reviewForm.rating}
+            onChange={handleReviewChange}
+          />
+        </div>
 
-            <div className="input-group">
-              <label>Comment</label>
-              <textarea
-                name="comment"
-                value={reviewForm.comment}
-                onChange={handleReviewChange}
-              />
-            </div>
+        <div className="input-group">
+          <label>Comment</label>
+          <textarea
+            name="comment"
+            value={reviewForm.comment}
+            onChange={handleReviewChange}
+          />
+        </div>
 
-            <button className="btn btn-primary" onClick={submitReview}>
-              Submit Review
-            </button>
-          </div>
-        )}
+        <button className="btn btn-primary" onClick={submitReview}>
+          Submit Review
+        </button>
+      </>
+    )}
+  </div>
+)}
 
         {user?.role === "professional" && (
-          <div className="card clickable-card" style={{ marginBottom: "24px" }}>
-            <h3 className="section-title">Join This Startup</h3>
-            <p className="muted" style={{ marginBottom: "12px" }}>
-              Request to join and contribute your technical skills.
-            </p>
+  <div className="card clickable-card" style={{ marginBottom: "24px" }}>
+    <h3 className="section-title">Join This Startup</h3>
 
-            <button className="btn btn-primary" onClick={requestJoin}>
-              Request to Join
-            </button>
-          </div>
-        )}
+    {!startup.techSupportRequired ? (
+      <div className="alert-error">
+        This startup is not currently looking for technical professionals.
+      </div>
+    ) : professionalAlreadyJoined ? (
+      <div className="alert-success">
+        You are already part of this startup team.
+      </div>
+    ) : joinStatus === "none" ? (
+      <>
+        <p className="muted" style={{ marginBottom: "12px" }}>
+          Request to join and contribute your technical skills.
+        </p>
 
-        {user?.role === "investor" && (
-          <div className="card clickable-card" style={{ marginBottom: "24px" }}>
-            <h3 className="section-title">Investor Action</h3>
+        <button className="btn btn-primary" onClick={requestJoin}>
+          Request to Join
+        </button>
+      </>
+    ) : joinStatus === "pending" ? (
+      <div className="alert-success">
+        Join request sent. Waiting for founder response.
+      </div>
+    ) : joinStatus === "rejected" ? (
+      <div className="alert-error">
+        Your join request was rejected.
+      </div>
+    ) : null}
+  </div>
+)}
+       {user?.role === "investor" && (
+  <div className="card clickable-card" style={{ marginBottom: "24px" }}>
+    <h3 className="section-title">Investor Action</h3>
 
-            {investorAlreadyLinked ? (
-              <>
-                <p className="muted" style={{ marginBottom: "12px" }}>
-                  You are already connected to this startup through an accepted funding request.
-                </p>
+    {startup.fundingRequired <= 0 ? (
+      <div className="alert-error">
+        This startup is not currently seeking funding.
+      </div>
+    ) : investorAlreadyLinked ? (
+      <>
+        <p className="muted" style={{ marginBottom: "12px" }}>
+          You are already connected to this startup through an accepted funding request.
+        </p>
 
-                <button className="btn btn-secondary" disabled>
-                  Funding Request Accepted
-                </button>
-              </>
-            ) : (
-              <>
-                <p className="muted" style={{ marginBottom: "12px" }}>
-                  Show interest in this startup to support its growth.
-                </p>
+        <button className="btn btn-secondary" disabled>
+          Funding Request Accepted
+        </button>
+      </>
+    ) : (
+      <>
+        <p className="muted" style={{ marginBottom: "12px" }}>
+          Show interest in this startup to support its growth.
+        </p>
 
-                <button className="btn btn-primary" onClick={showInterest}>
-                  Show Interest
-                </button>
-              </>
-            )}
-          </div>
-        )}
+        <button className="btn btn-primary" onClick={showInterest}>
+          Show Interest
+        </button>
+      </>
+    )}
+  </div>
+)}
 
         <h2 className="section-title">Mentor Reviews</h2>
 

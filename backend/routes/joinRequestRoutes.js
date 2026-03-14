@@ -7,7 +7,8 @@ const {
   acceptJoinRequest,
   rejectJoinRequest,
   voteJoinRequest,
-  getProfessionalJoinRequests
+  getProfessionalJoinRequests,
+  getProfessionalRequestStatus
 } = require("../controllers/joinRequestController");
 
 router.post("/", createJoinRequest);
@@ -16,5 +17,6 @@ router.get("/professional/:professionalId", getProfessionalJoinRequests);
 router.put("/accept/:requestId", acceptJoinRequest);
 router.put("/reject/:requestId", rejectJoinRequest);
 router.put("/vote/:requestId", voteJoinRequest);
+router.get("/status/:startupId/:professionalId", getProfessionalRequestStatus);
 
 module.exports = router;

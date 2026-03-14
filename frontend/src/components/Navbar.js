@@ -9,15 +9,15 @@ function Navbar() {
     sessionStorage.removeItem("user");
     navigate("/login");
   };
-
   return (
     <div className="navbar">
       <div className="navbar-inner">
-        <Link to="/" className="brand">
+        
+
+        <Link to={user ? "/dashboard" : "/"} className="brand">
           <img src="/logo.png" alt="StartupSphere Logo" className="brand-logo" />
           <span>StartupSphere</span>
         </Link>
-
         <div className="nav-links">
           <Link to={user ? "/dashboard" : "/"}>
     Dashboard

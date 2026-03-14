@@ -261,3 +261,29 @@ exports.getProfessionalJoinRequests = async (req, res) => {
     });
   }
 };
+exports.getProfessionalRequestStatus = async (req, res) => {
+  try {
+
+    const { startupId, professionalId } = req.params;
+
+    const request = await JoinRequest.findOne({
+      startup: startupId,
+      professional: professionalId
+    });
+
+    if (!request) {
+      return res.json({ status: "none" });
+    }
+
+    res.json({ status: request.status });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error checking request status"
+    });
+
+  }
+};

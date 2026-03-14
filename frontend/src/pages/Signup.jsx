@@ -70,7 +70,7 @@ function Signup() {
       <div className="card clickable-card" style={{maxWidth:"500px",margin:"40px auto"}}>
 
         <h2>Create Account</h2>
-
+<br></br>
         {message && (
           <div style={{
             marginBottom:"15px",
@@ -81,7 +81,7 @@ function Signup() {
             {message}
           </div>
         )}
-
+<br></br>
         <form onSubmit={handleSubmit}>
 
           <div className="input-group">
