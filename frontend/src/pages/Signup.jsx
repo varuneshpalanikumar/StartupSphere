@@ -18,6 +18,8 @@ function Signup() {
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -104,15 +106,26 @@ function Signup() {
           </div>
 
           <div className="input-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
+  <label>Password</label>
+
+  <div className="password-field">
+    <input
+      type={showPassword ? "text" : "password"}
+      name="password"
+      value={form.password}
+      onChange={handleChange}
+      required
+    />
+
+    <span
+      className="toggle-password"
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? "Hide" : "Show"}
+    </span>
+  </div>
+
+</div>
 
           <div className="input-group">
             <label>Role</label>

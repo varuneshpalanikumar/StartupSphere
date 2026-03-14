@@ -11,8 +11,9 @@ function StartupPortfolio() {
 
   const [data, setData] = useState(null);
   const [user, setUser] = useState(null);
+
   const [message, setMessage] = useState("");
-const [isError, setIsError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const [reviewForm, setReviewForm] = useState({
     rating: "",
@@ -23,6 +24,7 @@ const [isError, setIsError] = useState(false);
     progress: "",
     latestUpdate: ""
   });
+
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -36,6 +38,15 @@ const [isError, setIsError] = useState(false);
 
     fetchStartupDetails();
   }, [id]);
+
+  const showMessage = (text, error = false) => {
+    setIsError(error);
+    setMessage(text);
+
+    setTimeout(() => {
+      setMessage("");
+    }, 2000);
+  };
 
   const fetchStartupDetails = async () => {
     try {
@@ -51,120 +62,125 @@ const [isError, setIsError] = useState(false);
     }
   };
 
+  const handleReviewChange = (e) => {
+    let value = e.target.value;
 
- const handleReviewChange = (e) => {
-  let value = e.target.value;
+    if (e.target.name === "rating") {
+      if (value === "") {
+        setReviewForm({
+          ...reviewForm,
+          rating: value
+        });
+        return;
+      }
 
-  if (e.target.name === "rating") {
+      value = Number(value);
 
-    // allow empty input while typing
-    if (value === "") {
-      setReviewForm({
-        ...reviewForm,
-        rating: value
-      });
-      return;
+      if (value > 5) value = 5;
+      if (value < 1) value = 1;
     }
 
-    value = Number(value);
-
-    if (value > 5) value = 5;
-    if (value < 1) value = 1;
-  }
-
-  setReviewForm({
-    ...reviewForm,
-    [e.target.name]: value
-  });
-};
-const handleProgressChange = (e) => {
-  let value = e.target.value;
-
-  if (e.target.name === "progress") {
-    value = Math.min(100, Math.max(0, value));
-  }
-
-  setProgressForm({
-    ...progressForm,
-    [e.target.name]: value
-  });
-};
-const submitReview = async () => {
-  if (!user) return;
-
-  try {
-    const res = await API.post("/reviews/add", {
-      startupId: id,
-      mentorId: user._id,
-      rating: Number(reviewForm.rating),
-      comment: reviewForm.comment
-    });
-
-    setIsError(false);
-    setMessage(res.data?.message || "Review submitted successfully");
-
     setReviewForm({
-      rating: "",
-      comment: ""
+      ...reviewForm,
+      [e.target.name]: value
     });
+  };
 
-    fetchStartupDetails();
+  const handleProgressChange = (e) => {
+    let value = e.target.value;
 
-    setTimeout(() => {
-      setMessage("");
-    }, 2000);
+    if (e.target.name === "progress") {
+      value = Math.min(100, Math.max(0, value));
+    }
 
-  } catch (error) {
-    console.error(error);
-
-    setIsError(true);
-    setMessage(
-      error.response?.data?.message || "Failed to submit review"
-    );
-
-    setTimeout(() => {
-      setMessage("");
-    }, 2000);
-  }
-};
-
-const updateProgress = async () => {
-  try {
-    await API.put(`/startups/progress/${id}`, {
-      progress: Number(progressForm.progress),
-      latestUpdate: progressForm.latestUpdate
+    setProgressForm({
+      ...progressForm,
+      [e.target.name]: value
     });
+  };
 
-    await API.get(`/startups/score/${id}`);
-    fetchStartupDetails();
+  const submitReview = async () => {
+    if (!user) return;
 
-    setSuccessMsg("Startup progress updated successfully 🚀");
-    setTimeout(() => {
+    try {
+      const res = await API.post("/reviews/add", {
+        startupId: id,
+        mentorId: user._id,
+        rating: Number(reviewForm.rating),
+        comment: reviewForm.comment
+      });
+
+      setIsError(false);
+      setMessage(res.data?.message || "Review submitted successfully");
+
+      setReviewForm({
+        rating: "",
+        comment: ""
+      });
+
+      fetchStartupDetails();
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+
+      setIsError(true);
+      setMessage(
+        error.response?.data?.message || "Failed to submit review"
+      );
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
+    }
+  };
+
+  const updateProgress = async () => {
+    try {
+      await API.put(`/startups/progress/${id}`, {
+        progress: Number(progressForm.progress),
+        latestUpdate: progressForm.latestUpdate
+      });
+
+      await API.get(`/startups/score/${id}`);
+      fetchStartupDetails();
+
+      setSuccessMsg("Startup progress updated successfully 🚀");
+      setTimeout(() => {
+        setSuccessMsg("");
+      }, 2000);
+
+      setErrorMsg("");
+    } catch (error) {
+      console.error(error);
+      setErrorMsg("Failed to update progress");
       setSuccessMsg("");
-    }, 2000);
-    setErrorMsg("");
 
-  } catch (error) {
-    console.error(error);
-    setErrorMsg("Failed to update progress");
-    setSuccessMsg("");
-  }
-};
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 2000);
+    }
+  };
 
   const requestJoin = async () => {
     if (!user) return;
 
     try {
-      await API.post("/join-requests", {
+      const res = await API.post("/join-requests", {
         startupId: id,
         professionalId: user._id,
         message: "I would like to contribute to this startup."
       });
 
-      alert("Join request sent");
+      showMessage(res.data?.message || "Join request sent successfully");
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Failed to send join request");
+      showMessage(
+        error.response?.data?.message || "Failed to send join request",
+        true
+      );
     }
   };
 
@@ -172,17 +188,20 @@ const updateProgress = async () => {
     if (!user) return;
 
     try {
-      await API.put(`/startups/invest/${id}`, {
-        investorId: user._id
+      const res = await API.post("/investor-requests/interest", {
+        startupId: id,
+        investorId: user._id,
+        message: "I am interested in funding this startup."
       });
 
-      await API.get(`/startups/score/${id}`);
+      showMessage(res.data?.message || "Interest sent successfully");
       fetchStartupDetails();
-
-      alert("Investor interest added");
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Failed to show interest");
+      showMessage(
+        error.response?.data?.message || "Failed to show interest",
+        true
+      );
     }
   };
 
@@ -207,6 +226,14 @@ const updateProgress = async () => {
         <p className="page-subtitle">
           Founded by {startup.founder?.name || "Unknown Founder"}
         </p>
+
+        {message && (
+  <div className="floating-alert">
+    <div className={isError ? "alert-error" : "alert-success"}>
+      {message}
+    </div>
+  </div>
+)}
 
         <div className="card clickable-card" style={{ marginBottom: "20px" }}>
           <p><strong>Description:</strong> {startup.description}</p>
@@ -310,16 +337,16 @@ const updateProgress = async () => {
             <h3 className="section-title">Update Progress</h3>
 
             <div className="input-group">
-            <label>Progress (%)</label>
-            <input
-              type="number"
-              name="progress"
-              min="0"
-              max="100"
-              value={progressForm.progress}
-              onChange={handleProgressChange}
-            />
-          </div>
+              <label>Progress (%)</label>
+              <input
+                type="number"
+                name="progress"
+                min="0"
+                max="100"
+                value={progressForm.progress}
+                onChange={handleProgressChange}
+              />
+            </div>
 
             <div className="input-group">
               <label>Latest Update</label>
@@ -329,8 +356,10 @@ const updateProgress = async () => {
                 onChange={handleProgressChange}
               />
             </div>
+
             {successMsg && <div className="alert-success">{successMsg}</div>}
             {errorMsg && <div className="alert-error">{errorMsg}</div>}
+
             <button className="btn btn-primary" onClick={updateProgress}>
               Save Progress
             </button>
@@ -346,22 +375,18 @@ const updateProgress = async () => {
         {user?.role === "mentor" && startup.mentorReviewRequested && (
           <div className="card clickable-card" style={{ marginBottom: "24px" }}>
             <h3 className="section-title">Add Mentor Review</h3>
-            {message && (
-              <div className={isError ? "alert-error" : "alert-success"}>
-                {message}
-              </div>
-            )}
+
             <div className="input-group">
-            <label>Rating</label>
-            <input
-              type="number"
-              name="rating"
-              min="1"
-              max="5"
-              value={reviewForm.rating}
-              onChange={handleReviewChange}
-            />
-          </div>
+              <label>Rating</label>
+              <input
+                type="number"
+                name="rating"
+                min="1"
+                max="5"
+                value={reviewForm.rating}
+                onChange={handleReviewChange}
+              />
+            </div>
 
             <div className="input-group">
               <label>Comment</label>
@@ -420,7 +445,7 @@ const updateProgress = async () => {
         )}
 
         <h2 className="section-title">Mentor Reviews</h2>
-        
+
         <div className="grid grid-2">
           {reviews.length > 0 ? (
             reviews.map((review) => (

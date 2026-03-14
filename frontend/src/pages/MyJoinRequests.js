@@ -48,10 +48,12 @@ function MyJoinRequests() {
         </p>
 
         {message && (
-          <div className={isError ? "alert-error" : "alert-success"}>
-            {message}
-          </div>
-        )}
+  <div className="floating-alert">
+    <div className={isError ? "alert-error" : "alert-success"}>
+      {message}
+    </div>
+  </div>
+)}
 
         {requests.length === 0 ? (
           <p className="muted">You have not sent any join requests yet.</p>

@@ -43,10 +43,12 @@ function MentorStartups() {
         </p>
 
         {message && (
-          <div className={isError ? "alert-error" : "alert-success"}>
-            {message}
-          </div>
-        )}
+  <div className="floating-alert">
+    <div className={isError ? "alert-error" : "alert-success"}>
+      {message}
+    </div>
+  </div>
+)}
 
         {startups.length === 0 ? (
           <p className="muted">You are not mentoring any startups yet.</p>

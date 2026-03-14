@@ -5,6 +5,8 @@ import API from "../services/api";
 function InvestorRequests() {
   const user = JSON.parse(sessionStorage.getItem("user"));
   const [requests, setRequests] = useState([]);
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     fetchRequests();
@@ -16,24 +18,62 @@ function InvestorRequests() {
       setRequests(res.data);
     } catch (error) {
       console.error(error);
+      setIsError(true);
+      setMessage("Failed to fetch funding requests");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
     }
   };
 
   const acceptRequest = async (requestId) => {
     try {
-      await API.put(`/investor-requests/accept/${requestId}`);
+      const res = await API.put(`/investor-requests/accept/${requestId}`);
+
+      setIsError(false);
+      setMessage(res.data.message || "Funding request accepted successfully");
+
       fetchRequests();
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
     } catch (error) {
       console.error(error);
+      setIsError(true);
+      setMessage(
+        error.response?.data?.message || "Failed to accept funding request"
+      );
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
     }
   };
 
   const rejectRequest = async (requestId) => {
     try {
-      await API.put(`/investor-requests/reject/${requestId}`);
+      const res = await API.put(`/investor-requests/reject/${requestId}`);
+
+      setIsError(false);
+      setMessage(res.data.message || "Funding request rejected successfully");
+
       fetchRequests();
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
     } catch (error) {
       console.error(error);
+      setIsError(true);
+      setMessage(
+        error.response?.data?.message || "Failed to reject funding request"
+      );
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
     }
   };
 
@@ -46,6 +86,14 @@ function InvestorRequests() {
         <p className="page-subtitle">
           Review funding requests sent by founders.
         </p>
+
+        {message && (
+  <div className="floating-alert">
+    <div className={isError ? "alert-error" : "alert-success"}>
+      {message}
+    </div>
+  </div>
+)}
 
         {requests.length === 0 ? (
           <p className="muted">No pending funding requests.</p>
@@ -60,15 +108,15 @@ function InvestorRequests() {
                 </p>
 
                 <p>
-                  <strong>Startup Score:</strong> {request.startup?.startupScore}
+                  <strong>Startup Score:</strong> {request.startup?.startupScore || 0}
                 </p>
 
                 <p>
-                  <strong>Progress:</strong> {request.startup?.progress}%
+                  <strong>Progress:</strong> {request.startup?.progress || 0}%
                 </p>
 
                 <p>
-                  <strong>Funding Required:</strong> ${request.startup?.fundingRequired}
+                  <strong>Funding Required:</strong> ₹{request.startup?.fundingRequired || 0}
                 </p>
 
                 <p style={{ margin: "10px 0" }}>

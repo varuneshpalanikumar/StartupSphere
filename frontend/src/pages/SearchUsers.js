@@ -176,13 +176,15 @@ function SearchUsers() {
 
       <div className="page-container">
         <h1 className="page-title">{getTitle()}</h1>
-
+<br></br>
         {message && (
-          <div className={isError ? "alert-error" : "alert-success"}>
-            {message}
-          </div>
-        )}
-
+  <div className="floating-alert">
+    <div className={isError ? "alert-error" : "alert-success"}>
+      {message}
+    </div>
+  </div>
+)}
+<br></br>
         <div className="card clickable-card" style={{ marginBottom: "20px" }}>
           <div className="grid grid-3">
             <div className="input-group">

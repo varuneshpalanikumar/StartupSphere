@@ -20,25 +20,40 @@ function FounderInvestorRequests() {
       console.error(error);
       setIsError(true);
       setMessage("Failed to fetch funding requests");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
     }
   };
 
   const handleRequestAction = async (requestId, action) => {
     try {
-      await API.put(`/investor-requests/${action}/${requestId}`);
+      const res = await API.put(`/investor-requests/${action}/${requestId}`);
 
       setIsError(false);
       setMessage(
-        action === "accept"
-          ? "Funding request accepted successfully"
-          : "Funding request rejected successfully"
+        res.data.message ||
+          (action === "accept"
+            ? "Funding request accepted successfully"
+            : "Funding request rejected successfully")
       );
 
       fetchRequests();
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
     } catch (error) {
       console.error(error);
       setIsError(true);
-      setMessage("Failed to update funding request");
+      setMessage(
+        error.response?.data?.message || "Failed to update funding request"
+      );
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
     }
   };
 
@@ -49,17 +64,19 @@ function FounderInvestorRequests() {
       <div className="page-container">
         <h1 className="page-title">Your Funding Requests</h1>
         <p className="page-subtitle">
-          Track funding requests sent to investors.
+          Track founder requests and investor interest for your startups.
         </p>
 
         {message && (
-          <div className={isError ? "alert-error" : "alert-success"}>
-            {message}
-          </div>
-        )}
+  <div className="floating-alert">
+    <div className={isError ? "alert-error" : "alert-success"}>
+      {message}
+    </div>
+  </div>
+)}
 
         {requests.length === 0 ? (
-          <p className="muted">No funding requests sent yet.</p>
+          <p className="muted">No funding requests yet.</p>
         ) : (
           <div className="grid grid-2">
             {requests.map((request) => (
@@ -74,11 +91,15 @@ function FounderInvestorRequests() {
                   <strong>Status:</strong> {request.status}
                 </p>
 
+                <p>
+                  <strong>Initiated By:</strong> {request.initiatedBy}
+                </p>
+
                 <p style={{ marginTop: "10px" }}>
                   <strong>Message:</strong> {request.message || "No message"}
                 </p>
 
-                {request.status === "pending" && (
+                {request.status === "pending" && request.initiatedBy === "investor" && (
                   <div
                     style={{
                       display: "flex",
@@ -101,6 +122,24 @@ function FounderInvestorRequests() {
                       Reject
                     </button>
                   </div>
+                )}
+
+                {request.status === "pending" && request.initiatedBy === "founder" && (
+                  <p className="muted" style={{ marginTop: "14px" }}>
+                    Waiting for investor response.
+                  </p>
+                )}
+
+                {request.status === "accepted" && (
+                  <p className="muted" style={{ marginTop: "14px" }}>
+                    Investor has been added to the startup.
+                  </p>
+                )}
+
+                {request.status === "rejected" && (
+                  <p className="muted" style={{ marginTop: "14px" }}>
+                    This funding request was rejected.
+                  </p>
                 )}
               </div>
             ))}

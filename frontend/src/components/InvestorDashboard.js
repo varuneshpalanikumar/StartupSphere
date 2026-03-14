@@ -8,6 +8,7 @@ function InvestorDashboard() {
         <h3>Browse Startups</h3>
         <p>Explore startups and show interest.</p>
 <br></br>
+<br></br>
         <Link to="/search-startups">
           <button className="btn btn-primary">Browse</button>
         </Link>

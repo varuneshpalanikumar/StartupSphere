@@ -11,6 +11,8 @@ function Login() {
     password: ""
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
@@ -50,18 +52,14 @@ function Login() {
       <div className="card clickable-card" style={{maxWidth:"450px",margin:"40px auto"}}>
 
         <h2>Login</h2>
-        <br></br>
+        <br />
+
         {message && (
-          <div style={{
-            background:"#d55a5a",
-            padding:"10px",
-            marginBottom:"15px",
-            borderRadius:"8px"
-          }}>
+          <div className="alert-error">
             {message}
           </div>
         )}
-<br></br>
+
         <form onSubmit={handleSubmit}>
 
           <div className="input-group">
@@ -76,13 +74,24 @@ function Login() {
 
           <div className="input-group">
             <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
+
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+              />
+
+              <span
+                className="toggle-password"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </span>
+            </div>
+
           </div>
 
           <button className="btn btn-primary">
